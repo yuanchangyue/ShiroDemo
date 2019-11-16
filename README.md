@@ -1,14 +1,14 @@
-# ShiroDemo
-shrio 练习
-
+# Shiro学习
 ## 简介
 > Apache Shiro 是 Java 的一个安全框架。目前，使用 Apache Shiro 的人越来越多，因为它相当简单，对比 Spring Security，可能没有 Spring Security 做的功能强大，但是在实际工作时可能并不需要那么复杂的东西，所以使用小而简单的 Shiro 就足够了。对于它俩到底哪个好，这个不必纠结，能更简单的解决项目问题就好了。
 
 ## 概念
 
+> https://www.w3cschool.cn/shiro/co4m1if2.html 详细
+
 ## 使用
 
-### 依赖
+### 依赖 
 
 ```xml
     <dependency>
@@ -54,14 +54,14 @@ sm.setRealm(realm);
 SecurityUtils.setSecurityManager(sm);
 ```
 
-因为没有slf4j的配置，运行控制台报出
+因为没有`slf4j`的配置，运行控制台报出
 ```shell script
 SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
 SLF4J: Defaulting to no-operation (NOP) logger implementation
 SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
 ```
 
-加上log4j和slf4j 桥接
+加上`log4j`和`slf4j `桥接
 ```xml
 <!-- log4j 和 slf4j 桥接 -->
 <dependency>
@@ -98,8 +98,10 @@ AuthenticationToken usernamePasswordToken =
 //6.subject进行登录，认证检查
 subject.login(usernamePasswordToken);
 ```
-shrio.ini中有用户为zhangsan密码为123456的user
+`shrio.ini`中有用户为zhangsan密码为123456的user
 运行结果：
+
+![](https://github.com/yuanchangyue/ShiroDemo/blob/master/img/%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%AE%9E%E4%BE%8B%E8%AE%A4%E8%AF%81%E6%88%90%E5%8A%9F.png?raw=true)
 
 账号输入错误的抛出
 ```shell script
@@ -132,6 +134,8 @@ subject.logout();
 System.out.println("用户认证的状态：" + subject.isAuthenticated());
 ```
 运行结果:
+
+![](https://github.com/yuanchangyue/ShiroDemo/blob/master/img/%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%AE%9E%E4%BE%8B%E8%AE%A4%E8%AF%81%E6%88%90%E5%8A%9F_%E7%99%BB%E5%BD%95_%E7%8A%B6%E6%80%81_%E8%A7%92%E8%89%B2_%E7%99%BB%E5%87%BA.png?raw=true)
 
 
 ## 封装ShrioUtils
@@ -197,6 +201,8 @@ public class ShrioUtils {
 ```
 测试结果：
 
+![](https://github.com/yuanchangyue/ShiroDemo/blob/master/img/shrioUtils%E6%B5%8B%E8%AF%95.png?raw=true)
+
 ## 自定义Realm
 
 + 认证
@@ -261,6 +267,8 @@ public class ShrioRealm extends AuthorizingRealm {
     }
 ```
 测试自定义的Realm：
+
+![](https://github.com/yuanchangyue/ShiroDemo/blob/master/img/%E8%87%AA%E5%AE%9A%E4%B9%89Realm%E7%99%BB%E5%BD%95%E8%AE%A4%E8%AF%81%E6%B5%8B%E8%AF%95.png?raw=true)
 
 
 + 授权
@@ -354,34 +362,38 @@ public class ShrioRealm extends AuthorizingRealm {
 ```
 运行结果：
 
+![](https://github.com/yuanchangyue/ShiroDemo/blob/master/img/%E8%87%AA%E5%AE%9A%E4%B9%89Realms%E6%8E%88%E6%9D%83%E6%B5%8B%E8%AF%95.png?raw=true)
 
 ## Shrio异常
 
-+ `org.apache.shiro.authc.UnknownAccountException`        用户名不存在
-+ `org.apache.shiro.authc.CredentialsException`           认证不合法
-+ `org.apache.shiro.authc.DisabledAccountException`       账号禁用
-+ `org.apache.shiro.authc.LockedAccountException`         账号锁定
-+ `org.apache.shiro.authc.ExpiredCredentialsException`    凭证过期
-+ `org.apache.shiro.authc.AuthenticationException`        认证异常
- 
+|                       常见异常                       |     意义     |
+| :--------------------------------------------------: | :----------: |
+|   `org.apache.shiro.authc.UnknownAccountException`   | 用户名不存在 |
+|    `org.apache.shiro.authc.CredentialsException`     |  认证不合法  |
+|  `org.apache.shiro.authc.DisabledAccountException`   |   账号禁用   |
+|   `org.apache.shiro.authc.LockedAccountException`    |   账号锁定   |
+| `org.apache.shiro.authc.ExpiredCredentialsException` |   凭证过期   |
+|   `org.apache.shiro.authc.AuthenticationException`   |   认证异常   |
+
 
 ## 密码加密
 ### 散列算法
 
 
->散列算法可以把[任意尺寸]的数据(原始数据)转变为一个[固定尺寸]的”小数据”(叫”散列值”或”摘要”)
->特点： 1.不可逆性 2.确定性
+>**散列算法**可以把[任意尺寸]的数据(原始数据)转变为一个[固定尺寸]的”小数据”(叫”散列值”或”摘要”)
+>特点： 1.**不可逆性** 2.**确定性**
 
-但是....
+***但是....***
 
->直接对密码进行散列，可以对通过获得这个密码散列值，通过MD5密码破解网站得到某用户的密码。 不安全
+>直接对密码进行散列，可以对通过获得这个密码散列值，通过MD5密码破解网站得到某用户的密码。 **不安全**
 
-于是：
+***于是....***
 
->加Salt可以一定程度上解决这一问题。所谓加Salt方法，就是加点“佐料”。其基本想法是这样的：当用户首次提供密码时（通常是注册时），由系统自动往这个密码里撒一些“佐料”，然后再散列。而当用户登录时，系统为用户提供的代码撒上同样的“佐料”，然后散列，再比较散列值，已确定密码是否正确。
+>加**Salt**可以一定程度上解决这一问题。所谓加Salt方法，就是加点“佐料”。其基本想法是这样的：当用户首次提供密码时（通常是注册时），由系统自动往这个密码里撒一些“佐料”，然后再散列。而当用户登录时，系统为用户提供的代码撒上同样的“佐料”，然后散列，再比较散列值，已确定密码是否正确。
 >这里的“佐料”被称作“Salt值”，这个值是由系统随机生成的，并且只有系统知道。这样，即便两个用户使用了同一个密码，由于系统为它们生成的salt值不同，他们的散列值也是不同的。即便黑客可以通过自己的密码和自己生成的散列值来找具有特定密码的用户，但这个几率太小了
 
-直接MD5加密
++ **直接MD5加密**
+
 ```java
 Md5Hash md5Hash = new Md5Hash("123");
 System.out.println(md5Hash);
@@ -390,7 +402,10 @@ System.out.println(md5Hash);
 去 https://www.cmd5.com/ 破解
 如图：
 
-采用加盐和多次hash
+![](https://github.com/yuanchangyue/ShiroDemo/blob/master/img/MD5%E7%A0%B4%E8%A7%A3.png?raw=true)
+
++ **采用加盐和多次hash**
+
 ```java
  Md5Hash md5HashWithSalt = new Md5Hash("123", UUID.randomUUID().toString());
  System.out.println(md5HashWithSalt);
@@ -399,6 +414,8 @@ System.out.println(md5Hash);
  System.out.println(md5HashWithSalt_2);
 ```
 如图：
+
+![](https://github.com/yuanchangyue/ShiroDemo/blob/master/img/MD5%E7%A0%B4%E8%A7%A3_salt.png?raw=true)
 
 
 ### MD5Utils
@@ -468,6 +485,8 @@ public class MD5Utils {
 ```
 存入数据库的密码MD5加密成：`4d669a8578bfd2bf309ae16e198263f4`
 测试结果：
+
+![](https://github.com/yuanchangyue/ShiroDemo/blob/master/img/MD5%E7%A0%B4%E8%A7%A3_salt_success.png?raw=true)
 
 ### 更进一步
 
@@ -597,7 +616,7 @@ public class ShrioRealm extends AuthorizingRealm {
 
 测试结果：
 
-
+![](https://github.com/yuanchangyue/ShiroDemo/blob/master/img/MD5%E7%A0%B4%E8%A7%A3_salt_success_update.png?raw=true)
 
 
 
