@@ -48,11 +48,11 @@ public=product:view
 //1.初始化SecurityManger安全管理器
 DefaultSecurityManager sm = new DefaultSecurityManager();
 //2.配置用户的权限信息到安全管理器中
-Realm realm = new IniRealm("classpath:shrio.ini");
+Realm realm = new IniRealm("classpath:shiro.ini");
 sm.setRealm(realm);
 //3.使用SecurityUtils将securityManager设置到运行环境中
 SecurityUtils.setSecurityManager(sm);
-```
+````
 
 因为没有`slf4j`的配置，运行控制台报出
 ```shell script
@@ -74,7 +74,7 @@ SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further detail
 
 控制台打印
 ```shell script
-2019-11-16 21:13:55 DEBUG [main][ResourceUtils.java:159] - Opening resource from class path [shrio.ini]
+2019-11-16 21:13:55 DEBUG [main][ResourceUtils.java:159] - Opening resource from class path [shiro.ini]
 2019-11-16 21:13:55 DEBUG [main][Ini.java:351] - Parsing [users]
 2019-11-16 21:13:55 DEBUG [main][Ini.java:351] - Parsing [roles]
 2019-11-16 21:13:55 DEBUG [main][IniRealm.java:179] - Discovered the [roles] section.  Processing...
@@ -86,7 +86,7 @@ SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further detail
 //1.初始化SecurityManger安全管理器
 DefaultSecurityManager sm = new DefaultSecurityManager();
 //2.配置用户的权限信息到安全管理器中
-Realm realm = new IniRealm("classpath:shrio.ini");
+Realm realm = new IniRealm("classpath:shiro.ini");
 sm.setRealm(realm);
 //3.使用SecurityUtils将securityManager设置到运行环境中
 SecurityUtils.setSecurityManager(sm);
@@ -98,7 +98,7 @@ AuthenticationToken usernamePasswordToken =
 //6.subject进行登录，认证检查
 subject.login(usernamePasswordToken);
 ```
-`shrio.ini`中有用户为zhangsan密码为123456的user
+`shiro.ini`中有用户为zhangsan密码为123456的user
 运行结果：
 
 ![](https://github.com/yuanchangyue/ShiroDemo/blob/master/img/%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%AE%9E%E4%BE%8B%E8%AE%A4%E8%AF%81%E6%88%90%E5%8A%9F.png?raw=true)
@@ -142,20 +142,20 @@ System.out.println("用户认证的状态：" + subject.isAuthenticated());
 ```java
 /**
  * @program: shirodemo
- * @description: shrio工具类
+ * @description: shiro工具类
  * @author: 袁阊越
  * @create: 2019-11-16 21:47
  */
 public class ShrioUtils {
 
     /**
-     * 初始化shrio的运行环境
+     * 初始化shiro的运行环境
      */
     static {
         //1.初始化SecurityManger安全管理器
         DefaultSecurityManager sm = new DefaultSecurityManager();
         //2.配置用户的权限信息到安全管理器中
-        Realm realm = new IniRealm("classpath:shrio.ini");
+        Realm realm = new IniRealm("classpath:shiro.ini");
         sm.setRealm(realm);
         //3.使用SecurityUtils将securityManager设置到运行环境中
         SecurityUtils.setSecurityManager(sm);
@@ -201,7 +201,7 @@ public class ShrioUtils {
 ```
 测试结果：
 
-![](https://github.com/yuanchangyue/ShiroDemo/blob/master/img/shrioUtils%E6%B5%8B%E8%AF%95.png?raw=true)
+![](https://github.com/yuanchangyue/ShiroDemo/blob/master/img/shiroUtils%E6%B5%8B%E8%AF%95.png?raw=true)
 
 ## 自定义Realm
 
@@ -619,7 +619,50 @@ public class ShrioRealm extends AuthorizingRealm {
 ![](https://github.com/yuanchangyue/ShiroDemo/blob/master/img/MD5%E7%A0%B4%E8%A7%A3_salt_success_update.png?raw=true)
 
 
+## 缓存
+> 缓存管理器 CacheManager 
 
+### shiro内部提供的 `MemoryConstrainedCacheManager`
++ 关键代码
+```java
+ //3.配置缓存管理器
+ CacheManager cacheManager = new MemoryConstrainedCacheManager();
+ sm.setCacheManager(cacheManager);
+```
++ 测试类
+```java
+ Subject subject = ShrioUtils.login("zhangsan", "123456");
+
+ //用户触发某个按钮-->需要验证权限
+ System.out.println("检查新增的用户的权限" + subject.isPermitted("sys:user:create"));
+ System.out.println("检查新增的用户的权限" + subject.isPermitted("sys:user:create"));
+ System.out.println("检查新增的用户的权限" + subject.isPermitted("sys:user:create"));
+```
+## ehcache 三方的缓存整合
+ 
+ + 添加依赖
+ ```xml
+ <!--shiro-ehcache-->
+ <dependency>
+     <groupId>org.apache.shiro</groupId>
+     <artifactId>shiro-ehcache</artifactId>
+     <version>1.4.1</version>
+ </dependency>
+ <!--ehcache-->
+  <dependency>
+            <groupId>org.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+            <version>3.8.0</version>
+ </dependency>
+```
++ 关键代码
+```java
+  CacheManager cacheManager = new EhCacheManager();
+  sm.setCacheManager(cacheManager);
+```
+效果和上面的内部缓存管理器是一样的
+
++ ehcache 有自己默认的配置文件
  
 
 

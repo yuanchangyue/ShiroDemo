@@ -1,7 +1,6 @@
 package com.changyue;
 
-import com.changyue.shrio.utils.MD5Utils;
-import com.changyue.shrio.utils.ShrioUtils;
+import com.changyue.shiro.utils.ShiroUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -16,19 +15,19 @@ import java.util.UUID;
 
 /**
  * @program: shirodemo
- * @description: shrio 测试
+ * @description: shiro 测试
  * @author: 袁阊越
  * @create: 2019-11-16 20:43
  */
-public class ShrioTest {
+public class ShiroTest {
 
     @Test
-    public void shrioTest() {
+    public void shiroTest() {
 
         //1.初始化SecurityManger安全管理器
         DefaultSecurityManager sm = new DefaultSecurityManager();
         //2.配置用户的权限信息到安全管理器中
-        Realm realm = new IniRealm("classpath:shrio.ini");
+        Realm realm = new IniRealm("classpath:shiro.ini");
         sm.setRealm(realm);
         //3.使用SecurityUtils将securityManager设置到运行环境中
         SecurityUtils.setSecurityManager(sm);
@@ -69,7 +68,7 @@ public class ShrioTest {
     @Test
     public void testShrioUtils() {
         //登录object
-        Subject subject = ShrioUtils.login("zhangsan", "123456");
+        Subject subject = ShiroUtils.login("zhangsan", "123456");
         //检查授权资源
         System.out.println("用户是否拥有admin角色" + subject.hasRole("admin"));
         //subject退出
@@ -81,7 +80,7 @@ public class ShrioTest {
     @Test
     public void testShrioRealm() {
 
-        Subject subject = ShrioUtils.login("zhangsan", "123456");
+        Subject subject = ShiroUtils.login("zhangsan", "123456");
 
         //用户触发某个按钮-->需要验证权限
         System.out.println("检查新增的用户的权限" + subject.isPermitted("sys:user:create"));
@@ -127,10 +126,11 @@ public class ShrioTest {
         //最后加密密码
         password = MD5Utils.md5(password, salt);*/
 
-        Subject subject = ShrioUtils.login("zhangsan", "123456");
+        Subject subject = ShiroUtils.login("zhangsan", "123456");
         //用户认证的状态
         System.out.println("用户认证的状态：" + subject.isAuthenticated());
     }
+
 
     @Test
     public void testUUID() {
@@ -139,4 +139,25 @@ public class ShrioTest {
         //System.out.println(MD5Utils.md5PrivateSalt("123456", "f4af64b5c211be990ec6f26feef0f1ff"));
     }
 
+    @Test
+    public void testCaching() {
+
+        Subject subject = ShiroUtils.login("zhangsan", "123456");
+
+        //用户触发某个按钮-->需要验证权限
+        System.out.println("检查新增的用户的权限" + subject.isPermitted("sys:user:create"));
+        System.out.println("检查新增的用户的权限" + subject.isPermitted("sys:user:create"));
+
+    }
 }
+
+
+
+
+
+
+
+
+
+
+

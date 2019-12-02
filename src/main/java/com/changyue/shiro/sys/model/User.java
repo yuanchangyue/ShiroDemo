@@ -1,4 +1,4 @@
-package com.changyue.shrio.sys.model;
+package com.changyue.shiro.sys.model;
 
 /**
  * @program: shirodemo

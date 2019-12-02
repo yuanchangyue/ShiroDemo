@@ -1,7 +1,7 @@
-package com.changyue.shrio.sys.shrio;
+package com.changyue.shiro.sys.shiro;
 
-import com.changyue.shrio.sys.model.User;
-import com.changyue.shrio.utils.MD5Utils;
+import com.changyue.shiro.sys.model.User;
+import com.changyue.shiro.utils.MD5Utils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
@@ -17,7 +17,7 @@ import java.util.Set;
  * @author: 袁阊越
  * @create: 2019-11-16 22:04
  */
-public class ShrioRealm extends AuthorizingRealm {
+public class ShiroRealm extends AuthorizingRealm {
 
     /**
      * 授权

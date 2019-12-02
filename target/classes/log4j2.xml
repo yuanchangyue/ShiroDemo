@@ -4,12 +4,12 @@
     <appenders>
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout charset="UTF-8"
-                           pattern="%d{yyyy-MM-dd HH:mm:ss} %-5level [%thread][%file:%line] - %msg%n" />
+                           pattern="%d{yyyy-MM-dd HH:mm:ss} %-5level [%thread][%file:%line] - %msg%n"/>
         </Console>
     </appenders>
     <loggers>
-        <root level="ERROR">
-            <appender-ref ref="Console" />
+        <root level="DEBUG">
+            <appender-ref ref="Console"/>
         </root>
     </loggers>
 </configuration>

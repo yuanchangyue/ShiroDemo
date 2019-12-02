@@ -1,33 +1,44 @@
-package com.changyue.shrio.utils;
+package com.changyue.shiro.utils;
 
-import com.changyue.shrio.sys.shrio.ShrioRealm;
+import com.changyue.shiro.sys.shiro.ShiroRealm;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.cache.CacheManager;
+import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.mgt.DefaultSecurityManager;
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.subject.Subject;
 
 /**
  * @program: shirodemo
- * @description: shrio工具类
+ * @description: shiro工具类
  * @author: 袁阊越
  * @create: 2019-11-16 21:47
  */
-public class ShrioUtils {
+public class ShiroUtils {
 
     /**
-     * 初始化shrio的运行环境
+     * 初始化shiro的运行环境
      */
     static {
         //1.初始化SecurityManger安全管理器
         DefaultSecurityManager sm = new DefaultSecurityManager();
-        //2.配置用户的权限信息到安全管理器中
-        //Realm realm = new IniRealm("classpath:shrio.ini");
-        Realm shrioRealm = new ShrioRealm();
 
-        sm.setRealm(shrioRealm);
-        //3.使用SecurityUtils将securityManager设置到运行环境中
+        //2.配置用户的权限信息到安全管理器中
+        //Realm realm = new IniRealm("classpath:shiro.ini");
+        Realm shiroRealm = new ShiroRealm();
+
+        //3.配置缓存管理器
+       /* CacheManager cacheManager = new MemoryConstrainedCacheManager();
+        sm.setCacheManager(cacheManager);*/
+
+        CacheManager cacheManager = new EhCacheManager();
+        sm.setCacheManager(cacheManager);
+
+
+        sm.setRealm(shiroRealm);
+        //4.使用SecurityUtils将securityManager设置到运行环境中
         SecurityUtils.setSecurityManager(sm);
     }
 
